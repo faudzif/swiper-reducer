@@ -1,5 +1,7 @@
 (function ($) {
     $.fn.swiperReducer = function (options) {
+        var $this = $(this);
+        if (!$this.length) return false;
         var classNameSet = $(this).attr('class'),
             classNameArray = classNameSet.split(' '),
             className = classNameArray.length > 1 ? classNameArray[1] : classNameArray[0],
@@ -7,18 +9,22 @@
                 hasNavigation: true,
                 hasPagination: false,
                 parentClassName: className + '--swiper-parent',
-                beforeLoadClassName: null
+                beforeLoadClassName: null,
+                customInitFunction: null
             },
             settings = $.extend({}, defaults, options),
             sliderOptions = settings.slider,
             concatStringName = "-swiper",
             sliderVariable = className.concat(concatStringName),
             mergeObjects, navigationObj, paginationObj,
-            slideLength, itemParent;
+            slideLength, itemParent,
+            customInitFunctionProps = null;
 
         function initSlider(index, item) {
             $(item).parent().addClass(settings.parentClassName);
-
+            if (settings.customInitFunction) {
+                customInitFunctionProps = settings.customInitFunction(item) || {};
+            }
             navigationObj = {
                 navigation: {
                     nextEl: $(item)
@@ -38,10 +44,11 @@
             mergeObjects = $.extend({},
                 sliderOptions,
                 settings.hasNavigation ? navigationObj : null,
-                settings.hasPagination ? paginationObj : null
+                settings.hasPagination ? paginationObj : null,
+                customInitFunctionProps
             );
             sliderVariable = new Swiper(item, mergeObjects);
-            $(item).removeClass(settings.beforeLoadClassName);
+            $(item).parent().removeClass(settings.beforeLoadClassName);
         }
 
         $(this).each(function (index, item) {
@@ -71,7 +78,3 @@
         });
     };
 })(jQuery);
-
-
-
-
