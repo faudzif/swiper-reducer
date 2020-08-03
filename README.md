@@ -1,5 +1,6 @@
-# swiper-reducer
+## swiper-reducer
 
+```html
 var home = $('.home-spotlight').swiperReducer({
       slider: { // Swiper values
           loop: true,
@@ -7,4 +8,6 @@ var home = $('.home-spotlight').swiperReducer({
       },
       hasNavigation: false, // by default true
       hasPagination: true // by default false
-  });
+});
+```
+
